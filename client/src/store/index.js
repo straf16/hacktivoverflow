@@ -13,7 +13,8 @@ export default new Vuex.Store({
     question: {
       title: '',
       desc: '',
-      tags: []
+      tags: [],
+      answers: []
     },
     Toast: Swal.mixin({
       toast: true,
@@ -41,6 +42,7 @@ export default new Vuex.Store({
       state.question.title = payload.title
       state.question.desc = payload.desc
       state.question.tags = payload.tags
+      state.question.answers = payload.answers
     }
   },
   actions: {
@@ -106,7 +108,8 @@ export default new Vuex.Store({
             commit('SET_QUESTION', {
               title: data.title,
               desc: data.desc,
-              tags: data.tags
+              tags: data.tags,
+              answers: data.answers
             })
             resolve(data)
           })
@@ -154,8 +157,7 @@ export default new Vuex.Store({
           })
       })
     },
-    updateQuestion({ commit }, payload) {
-      console.log(payload)
+    updateQuestion ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios({
           method: 'PUT',
@@ -170,7 +172,6 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
             resolve(data)
           })
           .catch(({ response }) => {

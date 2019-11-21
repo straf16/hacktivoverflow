@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
   name: 'AskQuestion',
   data () {
@@ -62,7 +62,7 @@ export default {
       this.$store
         .dispatch('fetchQuestionId', { id })
         .then(result => {
-          // console.log(result)
+          console.log(result)
         })
         .catch(err => {
           err.data.message.forEach(error => {
@@ -107,8 +107,8 @@ export default {
         .finally(() => loading.close())
     }
   },
-  created () {
-    this.getQuestion(this.$route.params.id)
+  async created () {
+    await this.getQuestion(this.$route.params.id)
     this.title = this.question.title
     this.desc = this.question.desc
     this.tags = this.question.tags

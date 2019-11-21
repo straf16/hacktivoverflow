@@ -25,7 +25,7 @@
       </div>
       <div class="column">
         <div id="title">
-          <h4>{{ question.title }}</h4>
+          <h4 @click="answersPage(question._id)">{{ question.title }}</h4>
         </div>
         <div id="detail" style="">
           <div>
@@ -51,6 +51,9 @@ export default {
     }
   },
   methods: {
+    answersPage (id) {
+      this.$router.push({ path: `/questions/${id}` })
+    },
     getQuestions () {
       const loading = this.$buefy.loading.open()
       this.$store
