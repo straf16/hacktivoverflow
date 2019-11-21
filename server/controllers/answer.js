@@ -19,6 +19,7 @@ class AnswerController {
       .find({
         owner: req.loggedUser._id
       })
+      .populate('owner')
       .then(result => {
         if (result) {
           res.status(200).json(result)
@@ -34,6 +35,7 @@ class AnswerController {
   static findAnswerId(req, res, next) {
     Answer
       .findById(req.params.id)
+      .populate('owner')
       .then(result => {
         if (result) {
           res.status(200).json(result)

@@ -25,6 +25,15 @@ class QuestionController {
     }
     Question
       .find(search)
+      .populate('owner')
+      .populate({
+        path: 'answers',
+        model: 'Answer',
+        populate: {
+          path: 'owner',
+          model: 'User'
+        }
+      })
       .then(result => {
         if (result) {
           res.status(200).json(result)
@@ -42,7 +51,15 @@ class QuestionController {
       .findOne({
         _id: req.params.id
       })
-      .populate('answers')
+      .populate('owner')
+      .populate({
+        path: 'answers',
+        model: 'Answer',
+        populate: {
+          path: 'owner',
+          model: 'User'
+        }
+      })
       .then(result => {
         res.status(200).json(result)
       })
@@ -52,6 +69,15 @@ class QuestionController {
     Question
       .find({
         owner: req.loggedUser._id
+      })
+      .populate('owner')
+      .populate({
+        path: 'answers',
+        model: 'Answer',
+        populate: {
+          path: 'owner',
+          model: 'User'
+        }
       })
       .then(result => {
         res.status(200).json(result)
