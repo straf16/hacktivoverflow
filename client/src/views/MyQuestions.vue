@@ -1,14 +1,9 @@
 <template>
   <div class="container">
     <div id="header-content" class="columns">
-      <h1>All Questions</h1>
-      <router-link :to="{path: '/ask-question'}">
-        <b-button type="is-info">
-          Ask Question
-        </b-button>
-      </router-link>
+      <h1>My Questions</h1>
     </div>
-    <div id="content" class="columns" v-for="question in questions" :key="question._id">
+    <div id="content" class="columns" v-for="question in myQuestions" :key="question._id">
       <div class="column is-2" style="display: flex; font-size: 12px; color: grey;">
         <div style="padding: 8px; text-align: center;">
           <p class="px-1 text-muted" style="margin: 0;">{{ question.upvotes - question.downvotes }}</p>
@@ -33,8 +28,9 @@
               <span class="tag is-link is-light" v-for="(tag, i) in question.tags" :key="i">{{ tag }}</span>
             </b-taglist>
           </div>
-          <div style="font-size: 10px; color: #0077CC">
-            <p>{{ question.owner ? question.owner.name : 'unknown' }}</p>
+          <div style="font-size: 10px; color: #0077CC; display: flex;">
+            <p style="margin-right: 5px;"><router-link :to="{path: `/update-question/${question._id}`}">edit</router-link></p>
+            <p><a>delete</a></p>
           </div>
         </div>
       </div>
@@ -44,19 +40,19 @@
 
 <script>
 export default {
-  name: 'Questions',
+  name: 'MyQuestions',
   computed: {
-    questions () {
-      return this.$store.state.questions
+    myQuestions () {
+      return this.$store.state.myQuestions
     }
   },
   methods: {
-    getQuestions () {
+    getMyQuestions () {
       const loading = this.$buefy.loading.open()
       this.$store
-        .dispatch('fetchQuestions')
+        .dispatch('fetchMyQuestions')
         .then(result => {
-          this.$store.commit('SET_QUESTIONS', result)
+          this.$store.commit('SET_MY_QUESTIONS', result)
         })
         .catch(err => {
           err.data.message.forEach(error => {
@@ -71,7 +67,7 @@ export default {
     }
   },
   created () {
-    this.getQuestions()
+    this.getMyQuestions()
   }
 }
 </script>

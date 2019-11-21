@@ -4,7 +4,7 @@
           <b-menu-item
               label="My Questions"
               tag="router-link"
-              to="/">
+              to="/my-questions">
           </b-menu-item>
       </b-menu-list>
       <b-menu-list label="PUBLIC">

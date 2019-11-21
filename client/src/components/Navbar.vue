@@ -14,13 +14,17 @@
       </b-navbar-item>
       <b-navbar-item tag="div">
         <b-field>
-          <!-- <b-input placeholder="Search..."
-            type="search"
-            icon="magnify"
-            icon-clickable
-            @icon-click="searchIconClick"
-            style="width: 60vw;">
-          </b-input> -->
+          <form @submit.prevent="searchQuestions">
+            <b-input
+              v-model="keyword"
+              placeholder="Search..."
+              type="search"
+              icon="magnify"
+              icon-clickable
+              @icon-click="searchQuestions"
+              style="width: 60vw;">
+            </b-input>
+          </form>
         </b-field>
       </b-navbar-item>
     </template>
@@ -53,16 +57,46 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'navbar',
+  data () {
+    return {
+      keyword: ''
+    }
+  },
   computed: {
     ...mapState([ 'isLogin' ])
   },
   methods: {
+    searchQuestions () {
+      const loading = this.$buefy.loading.open()
+      this.$store
+        .dispatch('fetchQuestions', {
+          keyword: this.keyword
+        })
+        .then(async result => {
+          await this.$store.commit('SET_QUESTIONS', result)
+          if (this.$route.path !== '/') {
+            this.$router.push({ path: '/' })
+          }
+        })
+        .catch(err => {
+          err.data.message.forEach(error => {
+            this.$store.state
+              .Toast.fire({
+                icon: 'error',
+                title: error
+              })
+          })
+        })
+        .finally(() => loading.close())
+    },
     logout () {
       localStorage.removeItem('token')
       localStorage.removeItem('name')
       localStorage.removeItem('email')
       this.$store.commit('SET_LOGIN', false)
-      this.$router.push({ path: '/' })
+      if (this.$route.path !== '/') {
+        this.$router.push({ path: '/' })
+      }
       this.$store.state
         .Toast.fire({
           icon: 'success',

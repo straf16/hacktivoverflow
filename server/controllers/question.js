@@ -85,11 +85,12 @@ class QuestionController {
       .catch(next)
   }
   static updateQuestion(req, res, next) {
-    const { title, desc } = req.body
+    const { title, desc, tags } = req.body
     Question
       .findByIdAndUpdate(req.params.id, {
         title,
-        desc
+        desc,
+        tags
       }, { new: true, runValidators: true })
       .then(result => {
         res.status(201).json(result)
