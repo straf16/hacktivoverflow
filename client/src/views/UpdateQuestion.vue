@@ -13,7 +13,7 @@
               </b-input>
             </b-field>
             <b-field label="Body">
-              <quill v-model="desc" :config="config" output="html"></quill>
+              <quill ref="quill" v-model="desc" :config="config" output="html"></quill>
             </b-field>
             <b-field label="Tags">
               <b-taginput
@@ -62,7 +62,9 @@ export default {
       this.$store
         .dispatch('fetchQuestionId', { id })
         .then(result => {
-          console.log(result)
+          this.title = result.title
+          this.$refs.quill.editor.root.innerHTML = result.desc
+          this.tags = result.tags
         })
         .catch(err => {
           err.data.message.forEach(error => {
@@ -109,9 +111,6 @@ export default {
   },
   async created () {
     await this.getQuestion(this.$route.params.id)
-    this.title = this.question.title
-    this.desc = this.question.desc
-    this.tags = this.question.tags
   }
 }
 </script>

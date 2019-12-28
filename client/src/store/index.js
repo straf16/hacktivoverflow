@@ -178,6 +178,43 @@ export default new Vuex.Store({
             reject(response)
           })
       })
+    },
+    addAnswer ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'POST',
+          url: `/answers/${payload.questionId}`,
+          headers: {
+            token: localStorage.getItem('token')
+          },
+          data: {
+            desc: payload.desc
+          }
+        })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            reject(response)
+          })
+      })
+    },
+    fetchAnswerId ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'GET',
+          url: `/answers/${payload.id}`,
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            reject(response)
+          })
+      })
     }
   },
   modules: {

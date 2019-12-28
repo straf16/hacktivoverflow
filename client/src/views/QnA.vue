@@ -18,18 +18,15 @@
       </div>
     </div>
     <div id="content" class="columns" v-for="answer in question.answers" :key="answer._id">
-      <div class="column is-1" style="display: flex; font-size: 12px; color: grey;">
-        <!-- <div style="padding: 8px; text-align: center;">
-          <p class="px-1 text-muted" style="margin: 0;">{{ answer.upvotes - answer.downvotes }}</p>
-          <p>votes</p>
+      <div class="column is-1" style="display: flex; flex-direction: column; font-size: 12px; color: grey;">
+        <!-- <div style="margin-left: 20px; height: 40px; text-align: center; font-size: 60px;">
+          <i class="fas fa-caret-up"></i>
         </div>
-        <div style="padding: 8px; text-align: center;">
-          <p class="px-1 text-muted" style="margin: 0;">{{ question.answers.length }}</p>
-          <p>answers</p>
+        <div style="margin: 50px 30px; margin-bottom:0; height: 40px; text-align: center; font-size: 40px;">
+          <p>{{ answer.upvotes - answer.downvotes }}</p>
         </div>
-        <div style="padding: 8px; text-align: center;">
-          <p class="px-1 text-muted" style="margin: 0;">1</p>
-          <p>views</p>
+        <div style="margin-left: 20px; height: 40px; text-align: center; font-size: 60px;">
+          <i class="fas fa-caret-down"></i>
         </div> -->
       </div>
       <div class="column">
@@ -38,14 +35,18 @@
           <div style="font-size: 10px; color: #0077CC; text-align: right;">
             <p>{{ answer.owner ? answer.owner.name : 'unknown' }}</p>
           </div>
+          <div style="font-size: 10px; color: #0077CC; display: flex;">
+            <p style="margin-right: 5px;"><a>share</a></p>
+            <p><a>edit</a></p>
+          </div>
         </div>
       </div>
     </div>
     <div id="content" class="columns" style="min-height: 300px;">
       <div id="form-answer" class="column">
-        <form>
+        <form @submit.prevent="submitAnswer">
           <b-field label="Your Answer">
-            <quill v-model="desc" :config="config" output="html" style="min-height: 200px; height: 200px;"></quill>
+            <quill ref="quill" v-model="desc" :config="config" output="html" style="min-height: 200px; height: 200px;"></quill>
           </b-field>
           <input class="button is-info" type="submit" value="Post your answer" style="margin-top: 50px;">
         </form>
@@ -91,6 +92,61 @@ export default {
               tags: result.tags,
               answers: result.answers
             })
+        })
+        .catch(err => {
+          err.data.message.forEach(error => {
+            this.$store.state
+              .Toast.fire({
+                icon: 'error',
+                title: error
+              })
+          })
+        })
+        .finally(() => loading.close())
+    },
+    submitAnswer () {
+      if (localStorage.getItem('token')) {
+        const loading = this.$buefy.loading.open()
+        this.$store
+          .dispatch('addAnswer', {
+            questionId: this.$route.params.id,
+            desc: this.desc
+          })
+          .then(result => {
+            this.desc = ''
+            this.$refs.quill.editor.setText('')
+            this.getQuestion(this.$route.params.id)
+            this.$store.state
+              .Toast.fire({
+                icon: 'success',
+                title: 'Success post your answer'
+              })
+          })
+          .catch(err => {
+            err.data.message.forEach(error => {
+              this.$store.state
+                .Toast.fire({
+                  icon: 'error',
+                  title: error
+                })
+            })
+          })
+          .finally(() => loading.close())
+      } else {
+        this.$store.state
+          .Toast.fire({
+            icon: 'error',
+            title: 'Please login...'
+          })
+      }
+    },
+    editAnswer (id) {
+      console.log('hit')
+      const loading = this.$buefy.loading.open()
+      this.$store
+        .dispatch('fetchAnswerId', { id })
+        .then(result => {
+          this.$refs.quill.editor.root.innerHTML = result.desc
         })
         .catch(err => {
           err.data.message.forEach(error => {

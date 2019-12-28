@@ -27,7 +27,7 @@
         <div id="title">
           <h4 @click="answersPage(question._id)">{{ question.title }}</h4>
         </div>
-        <div id="detail" style="">
+        <div id="detail">
           <div>
             <b-taglist>
               <span class="tag is-link is-light" v-for="(tag, i) in question.tags" :key="i">{{ tag }}</span>
