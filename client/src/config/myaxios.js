@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: 'http://h8overflow-server.ahmadfd.site'
+  baseURL: 'https://hacktiv-overflow.herokuapp.com/'
 })
 
 export default instance
