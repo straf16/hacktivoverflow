@@ -1,1 +1,1 @@
-web:cd server && node bin/http.js
+web: cd server && node bin/http.js
