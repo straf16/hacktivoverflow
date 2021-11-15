@@ -1,0 +1,21 @@
+{
+  "name": "hacktivoverflow",
+  "version": "1.0.0",
+  "description": "DEMO : http://h8overflow.ahmadfd.site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd backend && node bin/http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/straf16/hacktivoverflow.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/straf16/hacktivoverflow/issues"
+  },
+  "homepage": "https://github.com/straf16/hacktivoverflow#readme"
+}
