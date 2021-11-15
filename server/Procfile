@@ -1,1 +1,1 @@
-web: node bin/http.js
+web:node bin/http.js
